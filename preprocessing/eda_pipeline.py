@@ -1,7 +1,7 @@
 import pandas as pd
 from typing import List
 
-from preprocessing.transformer_step import TransformerStep
+from ..transformer_step import TransformerStep
 
 #Wrapper class that helps passing the categorical columns (Especially for Label & One Hot)
 class ColumnTransformerStep:
