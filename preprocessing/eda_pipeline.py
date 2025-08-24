@@ -1,7 +1,7 @@
 import pandas as pd
 from typing import List
 
-from .transformer_step import TransformerStep
+from transformer_step import TransformerStep
 
 #Wrapper class that helps passing the categorical columns (Especially for Label & One Hot)
 class ColumnTransformerStep:
@@ -45,6 +45,7 @@ class EDAPipeline:
             if hasattr(step, "inverse_transform"):
                 return step.inverse_transform(df)
         raise NotImplementedError("No step has inverse_transform() implemented.")
+
 
 
 
