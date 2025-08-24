@@ -35,6 +35,6 @@ class LabelEncoding(EncodingStructure):
     """
     def inverse_transform(self, df : pd.DataFrame) -> dict[str, pd.Series]:
         return {
-            col : self.encoder.inverse_transform(df[col]) for col in self.cols
+            col : pd.Series(self.encoder[col].inverse_transform(df[col]), index=df.index) for col in self.cols
         }
 
