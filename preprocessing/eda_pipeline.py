@@ -1,26 +1,8 @@
 import pandas as pd
 from typing import List
-from abc import ABC, abstractmethod
 
-#For unknown reasons, Kaggle didn't recognize the file transformer_step.py, so i decided to make a safe class copy
-class TransformerStep(ABC):
-    """ Blueprint for all preprocessing addons"""
+from .transformer_step import TransformerStep
 
-    @abstractmethod
-    def fit(self, df : pd.DataFrame):
-        """ Learn any parameters of further extension """
-        return self
-
-    @abstractmethod
-    def transform(self, df : pd.DataFrame):
-        """ Apply the actual transformation """
-        ...
-
-    @abstractmethod
-    def fit_transform(self, df):
-        """ Combination of previous functions """
-        return self.fit(df).transform(df)
-        
 #Wrapper class that helps passing the categorical columns (Especially for Label & One Hot)
 class ColumnTransformerStep:
     def __init__(self, transformer, cols : List[str]):
@@ -51,6 +33,12 @@ class EDAPipeline:
 
     def fit_transform(self, df : pd.DataFrame) -> pd.DataFrame:
         return self.fit(df).transform(df)
+
+    def inverse_transform(self, df : pd.DataFrame) -> pd.DataFrame:
+        for step in reversed(self.steps):
+            if hasattr(step, "inverse_transform"):
+                return step.inverse_transform(df)
+        raise NotImplementedError("No step has inverse_transform() implemented.")
 
 
 
